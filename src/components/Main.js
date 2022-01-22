@@ -7,11 +7,12 @@ export default class Main extends Component {
   state = {
     novaTarefa: '',
     tarefas: [],
+    index: -1,
   };
 
   handeSubmit = (e) => {
     e.preventDefault();
-    const { tarefas } = this.state;
+    const { tarefas, index } = this.state;
     let { novaTarefa } = this.state;
     novaTarefa = novaTarefa.trim();
 
@@ -19,10 +20,19 @@ export default class Main extends Component {
 
     const novaTarefas = [...tarefas];
 
-    this.setState({
-      tarefas: [...novaTarefas, novaTarefa],
-      novaTarefa: '',
-    });
+    if (index === -1) {
+      this.setState({
+        tarefas: [...novaTarefas, novaTarefa],
+        novaTarefa: '',
+      });
+    } else {
+      novaTarefas[index] = novaTarefa;
+
+      this.setState({
+        tarefas: [...novaTarefas],
+        index: -1,
+      });
+    }
   };
 
   handleChange = (e) => {
@@ -31,9 +41,14 @@ export default class Main extends Component {
     });
   };
 
-  // handleEdit = (e, index) => {
-  // console.log('Edit', index);
-  // };
+  handleEdit = (e, index) => {
+    const { tarefas } = this.state;
+
+    this.setState({
+      index,
+      novaTarefa: tarefas[index],
+    });
+  };
 
   handleDelete = (e, index) => {
     const { tarefas } = this.state;
